@@ -1,14 +1,9 @@
 import argparse
-from data import valid_datasets as dataset_names
-
 
 def config():
     parser = argparse.ArgumentParser(description='GoogleNet PyTorch')
     parser.add_argument('dataset', metavar='DATA', default='cifar100',
-                        choices=dataset_names,
-                        help='dataset: ' +
-                             ' | '.join(dataset_names) +
-                             ' (default: cifar100)')
+                        help='dataset: cifar10')
     parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
                         help='number of data loading workers (default: 8)')
     parser.add_argument('-b', '--batch-size', default=128, type=int, metavar='N',
