@@ -96,9 +96,7 @@ def main():
     train_time = 0.0
     validate_time = 0.0
     lr = args.lr
-    list_Acc1 = []
-    list_Acc5 = []
-    list_epoch = []
+
     for epoch in range(start_epoch, args.epochs):
         adjust_learning_rate(optimizer, epoch, lr)
         print('\n==> Epoch: {}, lr = {}'.format(
@@ -131,12 +129,7 @@ def main():
                  'model': model.state_dict(),
                  'optimizer': optimizer.state_dict()}
         save_model(state, epoch, is_best, args)
-        list_Acc1 = list_Acc1 + acc1_valid
-        list_Acc5 = list_Acc5 + acc5_valid
-        list_epoch = list_epoch + epoch
-    plt.plot(list_epoch,list_Acc1)
-    plt.plot(list_epoch,list_Acc5)
-    plt.legend(['Acc1','Acc2'])
+
     avg_train_time = train_time / (args.epochs-start_epoch)
     avg_valid_time = validate_time / (args.epochs-start_epoch)
     total_train_time = train_time + validate_time
