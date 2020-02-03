@@ -11,7 +11,7 @@ from model import GoogLeNet
 from utils import *
 from config import config
 from data import DataLoader
-
+from matplotlib import pyplot as plt
 
 best_acc1 = 0
 
@@ -96,6 +96,9 @@ def main():
     train_time = 0.0
     validate_time = 0.0
     lr = args.lr
+    list_Acc1 = []
+    list_Acc5 = []
+    list_epoch = []
     for epoch in range(start_epoch, args.epochs):
         adjust_learning_rate(optimizer, epoch, lr)
         print('\n==> Epoch: {}, lr = {}'.format(
@@ -128,7 +131,12 @@ def main():
                  'model': model.state_dict(),
                  'optimizer': optimizer.state_dict()}
         save_model(state, epoch, is_best, args)
-
+        list_Acc1 = list_Acc1 + acc1_valid
+        list_Acc5 = list_Acc5 + acc5_valid
+        list_epoch = list_epoch + epoch
+    plt.plot(list_epoch,list_Acc1)
+    plt.plot(list_epoch,list_Acc5)
+    plt.legend(['Acc1','Acc2'])
     avg_train_time = train_time / (args.epochs-start_epoch)
     avg_valid_time = validate_time / (args.epochs-start_epoch)
     total_train_time = train_time + validate_time
@@ -203,8 +211,7 @@ def validate(val_loader, model, criterion):
     losses = AverageMeter('Loss', ':.4e')
     top1 = AverageMeter('Acc@1', ':6.2f')
     top5 = AverageMeter('Acc@5', ':6.2f')
-    progress = ProgressMeter(len(val_loader), batch_time, losses, top1, top5,
-                             prefix='Test: ')
+    progress = ProgressMeter(len(val_loader), batch_time, losses, top1, top5, prefix='Test: ')
 
     # switch to evaluate mode
     model.eval()
